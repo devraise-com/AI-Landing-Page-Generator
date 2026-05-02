@@ -407,7 +407,7 @@ export default function ReviewPage() {
           <div className={styles.generateOverlay}>
             <div className="spinner" />
             <div className={styles.generateTitle}>Generating your page...</div>
-            <div className={styles.generateSub}>This may take more than 30 seconds.</div>
+            <div className={styles.generateSub}>This may take more than 1 minute.</div>
           </div>
         </Popup>
       )}

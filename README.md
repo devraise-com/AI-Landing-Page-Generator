@@ -13,6 +13,10 @@ An AI-powered web app that turns a product description into a complete landing p
 3. User reviews the plan, edits any section if needed, then approves
 4. AI generates the final landing page from the approved plan
 
+## Demo
+
+![AI Landing Page Generator demo](docs/screens/demo.gif)
+
 ---
 
 ## Tech stack
@@ -125,6 +129,27 @@ System prompts live in `backend/prompts/*.txt`, loaded at startup. This separate
 **Input guardrails for MVP safety**
 
 Backend validates prompts before calling the LLM: max length via `INPUT_PROMPT_MAX_CHARS` (fallback `PROMPT_MAX_CHARS`), landing-page topic gating, and red-flag blocking (exploit/malware/SQLi/prompt-leak/command-execution intent). Invalid input returns `400` with a structured error response.
+
+---
+
+## How AI tools were used during development
+
+- Used AI coding assistants (Codex/Claude Code style workflow) to scaffold backend routers/schemas/services and frontend page/component structure.
+- Iterated prompts (`backend/prompts/*.txt`) with AI to improve output format stability and landing-page quality.
+- Used AI for refactoring and consistency passes (typed API client, error mapping, session flow, and UI state wiring).
+- Kept human review on architecture choices, acceptance criteria, and security/guardrail behavior.
+
+---
+
+## Intentional simplifications (6-hour scope)
+
+- Simplified generation pipeline to **2 core calls + 1 optional parse call** (no multi-agent research or critique/refine loops).
+- Used lightweight anonymous-token auth (`x-anonymous-token`) instead of full user accounts/session auth.
+- Kept UI intentionally minimal (single app flow, simple popups/cards, no visual editor/CMS).
+- Used `sessionStorage` for state persistence instead of database/user workspaces.
+- Returned full HTML in one response and rendered via sandboxed `iframe` (no component-level renderer/template engine).
+- Deferred a dedicated planning agent step before Call 1 (for disambiguation and enrichment when user input is sparse), to keep the MVP pipeline fast and simple.
+- Deferred advanced production features: rate-limiting layer, background jobs, observability dashboards, and full automated test suite.
 
 ---
 
