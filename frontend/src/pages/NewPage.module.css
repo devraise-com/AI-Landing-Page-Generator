@@ -1,0 +1,220 @@
+/* ── Root ── */
+.root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Content layer (gets blurred when popup is open) */
+.pageContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: filter 0.15s;
+}
+.pageContent.blurred {
+  filter: blur(3px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.55;
+}
+
+/* ── Page body ── */
+.page {
+  flex: 1;
+  padding: 32px 24px 80px;
+}
+
+/* ── Layout: mobile = column, desktop = two columns ── */
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+}
+
+/* ── Left column ── */
+.heading {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+@media (min-width: 768px) {
+  .heading { font-size: 32px; }
+}
+
+.subheading {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+/* ── Right column ── */
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Field group ── */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.textarea {
+  background: var(--surface2);
+  border: 1px solid var(--border-md);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--text);
+  font-family: var(--font);
+  resize: none;
+  line-height: 1.5;
+  min-height: 120px;
+  width: 100%;
+  transition: border-color 0.15s, background 0.15s;
+}
+.textarea::placeholder { color: var(--text-3); }
+.textarea:focus {
+  outline: none;
+  border-color: var(--purple-mid);
+  background: var(--surface);
+}
+.textarea:disabled { opacity: 0.6; cursor: not-allowed; }
+
+@media (min-width: 768px) {
+  .textarea { min-height: 160px; }
+}
+
+/* ── Tone chips ── */
+.toneRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.toneChip {
+  font-size: 12px;
+  font-family: var(--font);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border-md);
+  color: var(--text-2);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.toneChip:hover:not(:disabled) {
+  border-color: var(--purple-mid);
+  color: var(--purple-dark);
+}
+.toneChip:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.toneChipActive {
+  background: var(--purple-light);
+  border-color: var(--purple-mid);
+  color: var(--purple-dark);
+  font-weight: 500;
+}
+
+/* ── Submit button ── */
+.submitBtn {
+  align-self: flex-start;
+}
+
+@media (min-width: 768px) {
+  .submitBtn {
+    align-self: stretch;
+    width: 100%;
+  }
+}
+
+/* ── Loading popup content ── */
+.popupSpinner {
+  margin: 0 auto 16px;
+}
+
+.popupTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.stepList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-2);
+  transition: opacity 0.2s;
+}
+.stepItem.stepPending { opacity: 0.35; }
+
+.stepIc {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-md);
+}
+.stepIcDone { background: var(--green-light); color: var(--green); border-color: transparent; }
+.stepIcProg { background: var(--purple-light); color: var(--purple); border-color: transparent; }
+
+/* ── Error popup content ── */
+.errorIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--red-light);
+  color: var(--red);
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+
+.errorText {
+  font-size: 13px;
+  color: var(--text-2);
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}

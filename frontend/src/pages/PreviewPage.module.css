@@ -1,0 +1,78 @@
+/* ── Shell: fills viewport below the sticky nav ── */
+.shell {
+  height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+/* ── In-page header ── */
+.appHeader {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+}
+.badge {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: var(--green-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.headerTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ── Preview area ── */
+.previewArea {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  background: var(--surface2);
+}
+.previewArea::-webkit-scrollbar { width: 4px; }
+.previewArea::-webkit-scrollbar-track { background: transparent; }
+.previewArea::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 4px; }
+
+/* Mobile: full-width iframe */
+.iframe {
+  width: 100%;
+  border: none;
+  display: block;
+  height: 3000px;
+}
+
+/* Desktop: use full available width */
+@media (min-width: 768px) {
+  .previewArea {
+    padding: 24px;
+  }
+  .iframeContainer {
+    width: 100%;
+    max-width: none;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+}
+
+/* ── Footer ── */
+.footer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  background: var(--surface);
+}

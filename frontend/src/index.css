@@ -1,0 +1,169 @@
+/* ── Design tokens ── */
+:root {
+  --bg:           #F7F6F3;
+  --surface:      #FFFFFF;
+  --surface2:     #F0EEE9;
+  --border:       rgba(0,0,0,0.08);
+  --border-md:    rgba(0,0,0,0.14);
+  --text:         #1A1916;
+  --text-2:       #6B6860;
+  --text-3:       #A09D97;
+  --purple:       #534AB7;
+  --purple-light: #EEEDFE;
+  --purple-mid:   #AFA9EC;
+  --purple-dark:  #3C3489;
+  --green-light:  #EAF3DE;
+  --green:        #3B6D11;
+  --teal-light:   #E1F5EE;
+  --teal:         #0F6E56;
+  --red-light:    #FEEDED;
+  --red:          #B71A1A;
+  --radius:       12px;
+  --radius-sm:    8px;
+  --radius-xs:    6px;
+  --shadow:       0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:    0 4px 12px rgba(0,0,0,0.08);
+  --font:         'DM Sans', system-ui, sans-serif;
+  --font-mono:    'DM Mono', monospace;
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+.btn-primary:hover:not(:disabled) { background: var(--purple-dark); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text-2);
+  border: 1px solid var(--border-md);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--surface2);
+  color: var(--text);
+}
+.btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-2);
+  border: none;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+  text-decoration: none;
+  border-radius: var(--radius-xs);
+}
+.btn-ghost:hover:not(:disabled) { color: var(--text); background: var(--surface2); }
+.btn-ghost:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── Top nav ── */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(247,246,243,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-logo {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  margin-right: auto;
+}
+
+/* ── Error banner ── */
+.error-banner {
+  background: var(--red-light);
+  color: var(--red);
+  border: 1px solid rgba(183,26,26,0.18);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── Spinner ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2.5px solid var(--purple-mid);
+  border-top-color: var(--purple);
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+.spinner-sm {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--purple-mid);
+  border-top-color: var(--purple);
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
