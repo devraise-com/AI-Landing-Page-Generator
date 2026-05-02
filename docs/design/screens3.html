@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Landing Builder — Screen 4</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono&display=swap');
+
+:root {
+  --bg: #F7F6F3;
+  --surface: #FFFFFF;
+  --surface2: #F0EEE9;
+  --border: rgba(0,0,0,0.08);
+  --border-md: rgba(0,0,0,0.14);
+  --text: #1A1916;
+  --text-2: #6B6860;
+  --text-3: #A09D97;
+  --purple: #534AB7;
+  --purple-light: #EEEDFE;
+  --purple-mid: #AFA9EC;
+  --purple-dark: #3C3489;
+  --green-light: #EAF3DE;
+  --green: #3B6D11;
+  --teal-light: #E1F5EE;
+  --teal-mid: #9FE1CB;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* NAV */
+.top-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(247,246,243,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 48px;
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-label { font-size: 11px; font-weight: 500; color: var(--text-3); margin-right: 8px; letter-spacing: .04em; }
+.nav-chip {
+  font-size: 11px; font-weight: 500; padding: 4px 10px;
+  border-radius: 20px; border: 1px solid var(--border-md);
+  color: var(--text-2); background: var(--surface);
+  cursor: pointer; text-decoration: none; transition: all .15s;
+}
+.nav-chip:hover, .nav-chip.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+
+/* PAGE */
+.page { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* SECTION HEADER */
+.screen-section { margin-bottom: 64px; }
+.section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+.screen-id {
+  font-size: 11px; font-weight: 600; color: var(--purple);
+  letter-spacing: .08em; text-transform: uppercase;
+  background: var(--purple-light); padding: 3px 8px; border-radius: 4px;
+}
+.screen-title { font-size: 18px; font-weight: 600; }
+.screen-desc { font-size: 13px; color: var(--text-2); margin-top: 2px; }
+
+/* BREAKPOINT TOGGLE */
+.bp-toggle { display: flex; gap: 6px; margin-bottom: 20px; }
+.bp-btn {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 500; padding: 5px 10px;
+  border-radius: 6px; border: 1px solid var(--border-md);
+  background: var(--surface); color: var(--text-2);
+  cursor: pointer; font-family: var(--font); transition: all .15s;
+}
+.bp-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+.bp-btn svg { width: 12px; height: 12px; }
+
+/* DEVICE FRAME */
+.device-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: max-width .3s ease;
+}
+.device-wrap.mobile { max-width: 390px; }
+.device-wrap.desktop { max-width: 100%; }
+
+.device-bar {
+  background: var(--surface2); border-bottom: 1px solid var(--border);
+  padding: 8px 14px; display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+}
+.device-dots { display: flex; gap: 5px; }
+.device-dots span { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.device-url {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 10px;
+  font-size: 11px; color: var(--text-3); font-family: var(--font-mono);
+}
+
+/* APP SHELL */
+.app-shell { display: flex; flex-direction: column; height: 600px; }
+
+/* APP HEADER */
+.app-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 8px;
+}
+.app-header-badge {
+  width: 18px; height: 18px; border-radius: 4px;
+  background: var(--green-light);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.app-header-badge svg { width: 10px; height: 10px; }
+.app-header-title { font-size: 14px; font-weight: 600; color: var(--text); }
+
+/* PREVIEW AREA — mobile: scrollable lp content */
+.preview-area {
+  flex: 1; overflow-y: auto; min-height: 0;
+  background: var(--surface2);
+}
+.preview-area::-webkit-scrollbar { width: 4px; }
+.preview-area::-webkit-scrollbar-track { background: transparent; }
+.preview-area::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 4px; }
+
+/* desktop: centered container with max-width */
+.device-wrap.desktop .preview-area {
+  display: flex; justify-content: center;
+  padding: 24px;
+}
+.device-wrap.desktop .lp-container {
+  width: 100%; max-width: 480px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.device-wrap.mobile .lp-container {
+  width: 100%;
+}
+
+/* ── LANDING PAGE CONTENT ── */
+.lp-hero {
+  background: var(--purple);
+  padding: 40px 24px 36px;
+  text-align: center;
+}
+.device-wrap.desktop .lp-hero { padding: 48px 40px 44px; }
+
+.lp-hero-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--purple-mid); margin-bottom: 12px;
+}
+.lp-hero-title {
+  font-size: 26px; font-weight: 700; color: #EEEDFE;
+  line-height: 1.15; margin-bottom: 12px;
+}
+.device-wrap.desktop .lp-hero-title { font-size: 32px; }
+.lp-hero-sub {
+  font-size: 14px; color: var(--purple-mid);
+  line-height: 1.6; margin-bottom: 24px; max-width: 320px; margin-left: auto; margin-right: auto;
+}
+.lp-cta {
+  display: inline-block;
+  background: #EEEDFE; color: var(--purple-dark);
+  border-radius: var(--radius-sm); padding: 12px 24px;
+  font-size: 13px; font-weight: 700;
+}
+.lp-cta-sub { font-size: 11px; color: var(--purple-mid); margin-top: 10px; }
+
+.lp-section { padding: 28px 24px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.device-wrap.desktop .lp-section { padding: 32px 40px; }
+.lp-section-title {
+  font-size: 16px; font-weight: 700; color: var(--text);
+  margin-bottom: 16px; text-align: center;
+}
+
+/* Features — stacked on mobile, 3-col on desktop */
+.lp-features { display: flex; flex-direction: column; gap: 10px; }
+.device-wrap.desktop .lp-features { flex-direction: row; gap: 16px; }
+.lp-feature {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--surface2); border-radius: var(--radius-sm); padding: 12px 14px;
+}
+.device-wrap.desktop .lp-feature { flex-direction: column; flex: 1; gap: 8px; }
+.lp-feature-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--purple-light); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.lp-feature-icon svg { width: 14px; height: 14px; }
+.lp-feature-text { font-size: 12px; color: var(--text); font-weight: 500; line-height: 1.4; }
+.lp-feature-sub { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+
+/* Testimonial */
+.lp-quote-card {
+  background: var(--green-light);
+  border-radius: var(--radius-sm); padding: 16px;
+}
+.lp-quote-text {
+  font-size: 14px; color: var(--text); line-height: 1.6;
+  font-style: italic; margin-bottom: 12px;
+}
+.lp-quote-author { display: flex; align-items: center; gap: 10px; }
+.lp-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--teal-mid); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--teal, #0F6E56);
+}
+.lp-author-name { font-size: 12px; font-weight: 600; color: var(--text); }
+.lp-author-role { font-size: 11px; color: var(--text-2); }
+
+/* CTA footer */
+.lp-cta-footer {
+  background: var(--purple-dark);
+  padding: 32px 24px; text-align: center;
+}
+.device-wrap.desktop .lp-cta-footer { padding: 40px; }
+.lp-cta-footer-title {
+  font-size: 18px; font-weight: 700; color: #EEEDFE; margin-bottom: 8px;
+}
+.device-wrap.desktop .lp-cta-footer-title { font-size: 22px; }
+.lp-cta-footer-sub { font-size: 12px; color: var(--purple-mid); margin-bottom: 20px; line-height: 1.5; }
+.lp-cta-footer-btn {
+  display: inline-block; background: #EEEDFE; color: var(--purple-dark);
+  border-radius: var(--radius-sm); padding: 12px 28px;
+  font-size: 13px; font-weight: 700;
+}
+
+/* FOOTER */
+.screen-footer {
+  display: flex; gap: 8px; padding: 12px 16px;
+  border-top: 1px solid var(--border); flex-shrink: 0;
+  background: var(--surface);
+}
+.btn-secondary {
+  background: var(--surface2); color: var(--text);
+  border: 1px solid var(--border-md); border-radius: var(--radius-sm);
+  padding: 10px 14px; font-size: 12px; font-weight: 500;
+  font-family: var(--font); cursor: pointer; white-space: nowrap;
+}
+
+/* ANNOTATIONS */
+.annotations {
+  margin-top: 20px; background: #1A1916;
+  border-radius: var(--radius-sm); padding: 20px; font-family: var(--font-mono);
+}
+.ann-title {
+  font-size: 10px; font-weight: 600; color: #534AB7;
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px;
+}
+.ann-block { margin-bottom: 14px; }
+.ann-block:last-child { margin-bottom: 0; }
+.ann-key { font-size: 11px; color: #AFA9EC; margin-bottom: 3px; }
+.ann-val { font-size: 11px; color: #D3D1C7; line-height: 1.55; }
+.ann-val code { color: #9FE1CB; background: rgba(255,255,255,.05); padding: 1px 5px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <span class="nav-label">Screens</span>
+  <a class="nav-chip active" href="#s4">4 Final page</a>
+</nav>
+
+<div class="page">
+  <section class="screen-section" id="s4">
+    <div class="section-header">
+      <span class="screen-id">Screen 4</span>
+      <div>
+        <div class="screen-title">Final page</div>
+        <div class="screen-desc">Generated landing page rendered mobile-first. User can navigate back to plan or restart.</div>
+      </div>
+    </div>
+
+    <div class="bp-toggle">
+      <button class="bp-btn active" onclick="setBreakpoint('s4-device', 'mobile', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="2" y="1" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><rect x="4.5" y="8.5" width="3" height="1" rx=".5" fill="currentColor"/></svg>Mobile
+      </button>
+      <button class="bp-btn" onclick="setBreakpoint('s4-device', 'desktop', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 10h4M6 9v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Desktop
+      </button>
+    </div>
+
+    <div class="device-wrap mobile" id="s4-device">
+      <div class="device-bar">
+        <div class="device-dots">
+          <span style="background:#E24B4A"></span>
+          <span style="background:#EF9F27"></span>
+          <span style="background:#639922"></span>
+        </div>
+        <div class="device-url">app.build / preview</div>
+      </div>
+      <div class="app-shell">
+        <div class="app-header">
+          <div class="app-header-badge">
+            <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="app-header-title">Final page</span>
+        </div>
+
+        <div class="preview-area">
+          <div class="lp-container">
+
+            <div class="lp-hero">
+              <div class="lp-hero-eyebrow">Invoice tool</div>
+              <div class="lp-hero-title">Invoice faster. Get paid sooner.</div>
+              <div class="lp-hero-sub">Send professional invoices in under 60 seconds — no templates, no spreadsheets required.</div>
+              <div class="lp-cta">Start for free</div>
+              <div class="lp-cta-sub">No credit card needed</div>
+            </div>
+
+            <div class="lp-section">
+              <div class="lp-section-title">Everything you need</div>
+              <div class="lp-features">
+                <div class="lp-feature">
+                  <div class="lp-feature-icon">
+                    <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div>
+                    <div class="lp-feature-text">One-tap invoice creation</div>
+                    <div class="lp-feature-sub">Create and send in seconds</div>
+                  </div>
+                </div>
+                <div class="lp-feature">
+                  <div class="lp-feature-icon">
+                    <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div>
+                    <div class="lp-feature-text">Auto-fill client details</div>
+                    <div class="lp-feature-sub">Save time on every invoice</div>
+                  </div>
+                </div>
+                <div class="lp-feature">
+                  <div class="lp-feature-icon">
+                    <svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div>
+                    <div class="lp-feature-text">PDF + Stripe payment link</div>
+                    <div class="lp-feature-sub">Get paid instantly online</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="lp-section">
+              <div class="lp-section-title">What freelancers say</div>
+              <div class="lp-quote-card">
+                <div class="lp-quote-text">"I used to spend 30 minutes on every invoice. Now it's literally one click. I don't know how I managed before."</div>
+                <div class="lp-quote-author">
+                  <div class="lp-avatar">MK</div>
+                  <div>
+                    <div class="lp-author-name">Maria K.</div>
+                    <div class="lp-author-role">Freelance designer, 6 years</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="lp-cta-footer">
+              <div class="lp-cta-footer-title">Ready to save time on invoices?</div>
+              <div class="lp-cta-footer-sub">Join 2,400+ freelancers already using the tool</div>
+              <div class="lp-cta-footer-btn">Start for free</div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="screen-footer">
+          <button class="btn-secondary">Back to plan</button>
+          <button class="btn-secondary">Edit prompt</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann-title">// Claude Code — implementation notes</div>
+      <div class="ann-block"><div class="ann-key">Data source</div><div class="ann-val">Read <code>html</code> from <code>POST /api/generate-page</code> response and render it via <code>&lt;iframe srcdoc={html} sandbox="allow-scripts" /&gt;</code>.</div></div>
+      <div class="ann-block"><div class="ann-key">Mobile-first</div><div class="ann-val">Base styles target mobile. Desktop layout added via <code>@media (min-width: 768px)</code>. Features stacked on mobile → 3-column row on desktop.</div></div>
+      <div class="ann-block"><div class="ann-key">Preview area</div><div class="ann-val">Scrollable container with the landing page content. On desktop: centered at max-width 480px to simulate mobile-first view. App header and footer stay fixed.</div></div>
+      <div class="ann-block"><div class="ann-key">Back to plan</div><div class="ann-val">Navigate back to Screen 3.1. Restore <code>landingPlan</code> from session — no re-fetch needed.</div></div>
+      <div class="ann-block"><div class="ann-key">Edit prompt</div><div class="ann-val">Navigate back to Screen 1.1. Restore <code>prompt</code> and <code>tone</code> from session storage into the form.</div></div>
+      <div class="ann-block"><div class="ann-key">LLM output</div><div class="ann-val">LLM Call 2 returns <code>{ html: string }</code> (a complete standalone HTML document). The preview is sandboxed in an iframe.</div></div>
+    </div>
+  </section>
+</div>
+
+<script>
+function setBreakpoint(deviceId, bp, btn) {
+  const device = document.getElementById(deviceId);
+  device.classList.remove('mobile', 'desktop');
+  device.classList.add(bp);
+  btn.closest('.bp-toggle').querySelectorAll('.bp-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

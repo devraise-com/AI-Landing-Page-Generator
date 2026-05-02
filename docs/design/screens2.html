@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Landing Builder — Screens 3.1, 3.2, 3.3</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono&display=swap');
+
+:root {
+  --bg: #F7F6F3;
+  --surface: #FFFFFF;
+  --surface2: #F0EEE9;
+  --border: rgba(0,0,0,0.08);
+  --border-md: rgba(0,0,0,0.14);
+  --text: #1A1916;
+  --text-2: #6B6860;
+  --text-3: #A09D97;
+  --purple: #534AB7;
+  --purple-light: #EEEDFE;
+  --purple-mid: #AFA9EC;
+  --purple-dark: #3C3489;
+  --green-light: #EAF3DE;
+  --green: #3B6D11;
+  --teal-light: #E1F5EE;
+  --teal: #0F6E56;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* NAV */
+.top-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(247,246,243,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 48px;
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-label { font-size: 11px; font-weight: 500; color: var(--text-3); margin-right: 8px; letter-spacing: .04em; }
+.nav-chip {
+  font-size: 11px; font-weight: 500; padding: 4px 10px;
+  border-radius: 20px; border: 1px solid var(--border-md);
+  color: var(--text-2); background: var(--surface);
+  cursor: pointer; text-decoration: none; transition: all .15s;
+}
+.nav-chip:hover, .nav-chip.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+
+/* PAGE */
+.page { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* SECTION */
+.screen-section { margin-bottom: 64px; }
+.section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+.screen-id {
+  font-size: 11px; font-weight: 600; color: var(--purple);
+  letter-spacing: .08em; text-transform: uppercase;
+  background: var(--purple-light); padding: 3px 8px; border-radius: 4px;
+}
+.screen-title { font-size: 18px; font-weight: 600; color: var(--text); }
+.screen-desc { font-size: 13px; color: var(--text-2); margin-top: 2px; }
+
+/* BREAKPOINT TOGGLE */
+.bp-toggle { display: flex; align-items: center; gap: 6px; margin-bottom: 20px; }
+.bp-btn {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 500; padding: 5px 10px;
+  border-radius: 6px; border: 1px solid var(--border-md);
+  background: var(--surface); color: var(--text-2);
+  cursor: pointer; transition: all .15s; font-family: var(--font);
+}
+.bp-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+.bp-btn svg { width: 12px; height: 12px; }
+
+/* DEVICE FRAME */
+.device-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); transition: max-width .3s ease;
+  position: relative;
+}
+.device-wrap.mobile { max-width: 390px; }
+.device-wrap.desktop { max-width: 100%; }
+
+.device-bar {
+  background: var(--surface2); border-bottom: 1px solid var(--border);
+  padding: 8px 14px; display: flex; align-items: center; gap: 12px;
+  flex-shrink: 0;
+}
+.device-dots { display: flex; gap: 5px; }
+.device-dots span { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.device-url {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 10px;
+  font-size: 11px; color: var(--text-3); font-family: var(--font-mono);
+}
+
+/* APP SHELL */
+.app-shell { display: flex; flex-direction: column; }
+
+/* SHARED BUTTONS */
+.btn-primary {
+  background: var(--purple); color: #fff; border: none;
+  border-radius: var(--radius-sm); padding: 10px 16px;
+  font-size: 12px; font-weight: 600; font-family: var(--font);
+  cursor: pointer; white-space: nowrap;
+}
+.btn-secondary {
+  background: var(--surface2); color: var(--text);
+  border: 1px solid var(--border-md);
+  border-radius: var(--radius-sm); padding: 10px 14px;
+  font-size: 12px; font-weight: 500; font-family: var(--font);
+  cursor: pointer; white-space: nowrap;
+}
+
+/* FOOTER BAR */
+.screen-footer {
+  display: flex; gap: 8px; align-items: center;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════
+   SCREEN 3.1 — VIEW MODE
+══════════════════════════════ */
+.s31-body {
+  display: flex; flex-direction: column; flex: 1; min-height: 0;
+  height: 520px;
+}
+.s31-header {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.s31-header h2 { font-size: 15px; font-weight: 600; color: var(--text); }
+
+.cards-area {
+  flex: 1; overflow-y: auto; padding: 12px 16px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cards-area::-webkit-scrollbar { width: 4px; }
+.cards-area::-webkit-scrollbar-track { background: transparent; }
+.cards-area::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 4px; }
+
+/* desktop: 2-col grid */
+.device-wrap.desktop .cards-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-content: start;
+}
+
+.plan-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface);
+}
+.plan-card-head {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.plan-card-head-left { display: flex; align-items: center; gap: 7px; }
+.card-name { font-size: 11px; font-weight: 600; color: var(--text); }
+.tag {
+  font-size: 9px; font-weight: 600; padding: 2px 6px;
+  border-radius: 3px; text-transform: uppercase; letter-spacing: .04em;
+}
+.tag-purple { background: var(--purple-light); color: var(--purple-dark); }
+.tag-green  { background: var(--green-light);  color: var(--green); }
+.tag-teal   { background: var(--teal-light);   color: var(--teal); }
+.icon-group { display: flex; gap: 4px; }
+.icon-btn {
+  width: 24px; height: 24px; border-radius: 5px;
+  border: 1px solid var(--border-md);
+  background: var(--surface);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .12s;
+}
+.icon-btn:hover { background: var(--surface2); }
+.icon-btn svg { width: 12px; height: 12px; }
+
+.plan-card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 7px; }
+.field-lbl {
+  font-size: 9px; font-weight: 600; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px;
+}
+.field-val { font-size: 11px; color: var(--text); line-height: 1.45; }
+.vis-hint {
+  display: flex; align-items: flex-start; gap: 8px;
+  background: var(--surface2); border-radius: 5px; padding: 7px 9px;
+}
+.vis-swatch { width: 28px; height: 22px; border-radius: 4px; flex-shrink: 0; }
+.vis-txt { font-size: 10px; color: var(--text-2); line-height: 1.4; }
+
+/* ══════════════════════════════
+   SCREEN 3.2 — EDIT MODE
+══════════════════════════════ */
+.s32-body {
+  display: flex; flex-direction: column; flex: 1; min-height: 0; height: 520px;
+}
+.back-link {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--text-2);
+  padding: 11px 16px 0;
+  flex-shrink: 0; cursor: pointer;
+}
+.back-link svg { width: 12px; height: 12px; }
+
+.edit-area {
+  flex: 1; padding: 12px 16px; display: flex;
+  flex-direction: column; gap: 10px; min-height: 0;
+}
+
+/* desktop: sidebar layout */
+.device-wrap.desktop .edit-area {
+  flex-direction: row; gap: 24px;
+}
+.device-wrap.desktop .edit-sidebar {
+  width: 220px; flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.device-wrap.mobile .edit-sidebar { display: none; }
+
+.sidebar-title { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+.sidebar-item {
+  padding: 8px 10px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: 11px; color: var(--text-2); cursor: pointer;
+  background: var(--surface); transition: all .12s;
+}
+.sidebar-item.active {
+  background: var(--purple-light);
+  border-color: var(--purple-mid);
+  color: var(--purple-dark); font-weight: 500;
+}
+.sidebar-item:hover:not(.active) { background: var(--surface2); }
+
+.edit-main { flex: 1; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+
+.edit-card {
+  border: 1px solid var(--purple-mid);
+  border-radius: var(--radius-sm); overflow: hidden;
+  flex: 1; display: flex; flex-direction: column; min-height: 0;
+}
+.edit-card-head {
+  background: var(--purple-light);
+  border-bottom: 1px solid var(--purple-mid);
+  padding: 8px 12px; display: flex; align-items: center; gap: 7px;
+  flex-shrink: 0;
+}
+.edit-card-name { font-size: 11px; font-weight: 600; color: var(--purple-dark); }
+.edit-card-body { padding: 10px 12px; flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.edit-textarea {
+  width: 100%; flex: 1; min-height: 120px;
+  border: 1px solid var(--purple-mid);
+  border-radius: 6px; padding: 10px 12px;
+  font-size: 11px; color: var(--text);
+  background: var(--surface);
+  line-height: 1.7; resize: none;
+  font-family: var(--font-mono);
+  transition: border-color .15s;
+}
+.edit-textarea:focus { outline: none; border-color: var(--purple); }
+.edit-hint {
+  font-size: 10px; color: var(--text-3); margin-top: 6px; flex-shrink: 0; line-height: 1.4;
+}
+
+/* ══════════════════════════════
+   SCREEN 3.3 — SAVE POPUP
+══════════════════════════════ */
+.blur-layer { filter: blur(3px); opacity: .5; pointer-events: none; user-select: none; }
+.popup-overlay {
+  position: absolute; inset: 0; top: 37px;
+  background: rgba(26,25,22,0.38);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.popup {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px; width: 88%; max-width: 300px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.popup-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.popup-sub { font-size: 12px; color: var(--text-2); line-height: 1.5; margin-bottom: 18px; }
+.popup-footer { display: flex; gap: 8px; }
+
+/* ANNOTATIONS */
+.annotations {
+  margin-top: 20px; background: #1A1916;
+  border-radius: var(--radius-sm); padding: 20px; font-family: var(--font-mono);
+}
+.ann-title {
+  font-size: 10px; font-weight: 600; color: #534AB7;
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px;
+}
+.ann-block { margin-bottom: 14px; }
+.ann-block:last-child { margin-bottom: 0; }
+.ann-key { font-size: 11px; color: #AFA9EC; margin-bottom: 3px; }
+.ann-val { font-size: 11px; color: #D3D1C7; line-height: 1.55; }
+.ann-val code { color: #9FE1CB; background: rgba(255,255,255,.05); padding: 1px 5px; border-radius: 3px; }
+
+/* DIVIDER */
+.divider { display: flex; align-items: center; gap: 12px; margin: 8px 0 32px; }
+.divider-line { flex: 1; height: 1px; background: var(--border); }
+.divider-label { font-size: 10px; font-weight: 600; color: var(--text-3); letter-spacing: .08em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <span class="nav-label">Screens</span>
+  <a class="nav-chip active" href="#s31">3.1 View</a>
+  <a class="nav-chip" href="#s32">3.2 Edit</a>
+  <a class="nav-chip" href="#s33">3.3 Popup</a>
+</nav>
+
+<div class="page">
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 3.1 — VIEW MODE
+  ══════════════════════════════════════════ -->
+  <section class="screen-section" id="s31">
+    <div class="section-header">
+      <span class="screen-id">Screen 3.1</span>
+      <div>
+        <div class="screen-title">View mode</div>
+        <div class="screen-desc">User reviews the generated landing plan. Each section is a card with copy and visual direction.</div>
+      </div>
+    </div>
+
+    <div class="bp-toggle">
+      <button class="bp-btn active" onclick="setBreakpoint('s31-device', 'mobile', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="2" y="1" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><rect x="4.5" y="8.5" width="3" height="1" rx=".5" fill="currentColor"/></svg>Mobile
+      </button>
+      <button class="bp-btn" onclick="setBreakpoint('s31-device', 'desktop', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 10h4M6 9v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Desktop
+      </button>
+    </div>
+
+    <div class="device-wrap mobile" id="s31-device">
+      <div class="device-bar">
+        <div class="device-dots">
+          <span style="background:#E24B4A"></span><span style="background:#EF9F27"></span><span style="background:#639922"></span>
+        </div>
+        <div class="device-url">app.build / review</div>
+      </div>
+      <div class="app-shell">
+        <div class="s31-body">
+          <div class="s31-header"><h2>Landing plan</h2></div>
+          <div class="cards-area">
+
+            <div class="plan-card">
+              <div class="plan-card-head">
+                <div class="plan-card-head-left">
+                  <span class="card-name">Hero</span>
+                  <span class="tag tag-purple">above the fold</span>
+                </div>
+                <div class="icon-group">
+                  <span class="icon-btn" title="Edit">
+                    <svg viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="var(--text-2)" stroke-width="1.2" stroke-linejoin="round"/></svg>
+                  </span>
+                  <span class="icon-btn" title="Delete">
+                    <svg viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V3h4v1M5.5 6.5v4M8.5 6.5v4M3 4l.7 7.3A1 1 0 004.7 12h4.6a1 1 0 001-.9L11 4" stroke="var(--text-2)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </div>
+              </div>
+              <div class="plan-card-body">
+                <div><div class="field-lbl">Headline</div><div class="field-val">Invoice faster. Get paid sooner.</div></div>
+                <div><div class="field-lbl">Subheadline</div><div class="field-val">Send invoices in under 60 seconds — no templates, no spreadsheets.</div></div>
+                <div>
+                  <div class="field-lbl">Visual direction</div>
+                  <div class="vis-hint"><div class="vis-swatch" style="background:#AFA9EC"></div><div class="vis-txt">Split layout — dashboard screenshot left, headline + CTA right. Purple gradient background.</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="plan-card">
+              <div class="plan-card-head">
+                <div class="plan-card-head-left">
+                  <span class="card-name">Features</span>
+                  <span class="tag tag-purple">3-column</span>
+                </div>
+                <div class="icon-group">
+                  <span class="icon-btn"><svg viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="var(--text-2)" stroke-width="1.2" stroke-linejoin="round"/></svg></span>
+                  <span class="icon-btn"><svg viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V3h4v1M5.5 6.5v4M8.5 6.5v4M3 4l.7 7.3A1 1 0 004.7 12h4.6a1 1 0 001-.9L11 4" stroke="var(--text-2)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+              </div>
+              <div class="plan-card-body">
+                <div><div class="field-lbl">Copy</div><div class="field-val">One-tap invoice creation · Auto-fill client details · PDF + Stripe payment link</div></div>
+                <div>
+                  <div class="field-lbl">Visual direction</div>
+                  <div class="vis-hint"><div class="vis-swatch" style="background:#5DCAA5"></div><div class="vis-txt">3 icon cards with short label + 1-line description each. Light green tint.</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="plan-card">
+              <div class="plan-card-head">
+                <div class="plan-card-head-left">
+                  <span class="card-name">Social proof</span>
+                  <span class="tag tag-green">testimonials</span>
+                </div>
+                <div class="icon-group">
+                  <span class="icon-btn"><svg viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="var(--text-2)" stroke-width="1.2" stroke-linejoin="round"/></svg></span>
+                  <span class="icon-btn"><svg viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V3h4v1M5.5 6.5v4M8.5 6.5v4M3 4l.7 7.3A1 1 0 004.7 12h4.6a1 1 0 001-.9L11 4" stroke="var(--text-2)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+              </div>
+              <div class="plan-card-body">
+                <div><div class="field-lbl">Quote</div><div class="field-val">"I used to spend 30 mins per invoice. Now it's one click." — Maria K., freelance designer</div></div>
+                <div>
+                  <div class="field-lbl">Visual direction</div>
+                  <div class="vis-hint"><div class="vis-swatch" style="background:#9FE1CB"></div><div class="vis-txt">Horizontal quote card, avatar + name. Subtle green tint background.</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="plan-card">
+              <div class="plan-card-head">
+                <div class="plan-card-head-left">
+                  <span class="card-name">CTA</span>
+                  <span class="tag tag-teal">footer</span>
+                </div>
+                <div class="icon-group">
+                  <span class="icon-btn"><svg viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="var(--text-2)" stroke-width="1.2" stroke-linejoin="round"/></svg></span>
+                  <span class="icon-btn"><svg viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V3h4v1M5.5 6.5v4M8.5 6.5v4M3 4l.7 7.3A1 1 0 004.7 12h4.6a1 1 0 001-.9L11 4" stroke="var(--text-2)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+              </div>
+              <div class="plan-card-body">
+                <div><div class="field-lbl">Button text</div><div class="field-val">Start for free — no credit card needed</div></div>
+                <div>
+                  <div class="field-lbl">Visual direction</div>
+                  <div class="vis-hint"><div class="vis-swatch" style="background:#7F77DD"></div><div class="vis-txt">Full-width banner, centered button, dark purple background.</div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="screen-footer">
+            <button class="btn-primary">Approve &amp; generate page</button>
+            <button class="btn-secondary">Edit prompt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann-title">// Claude Code — implementation notes</div>
+      <div class="ann-block"><div class="ann-key">Data source</div><div class="ann-val">Read <code>landingPlan</code> from session storage. Shape: <code>{ sections: [{ id, name, type, fields: {}, visual_direction }] }</code></div></div>
+      <div class="ann-block"><div class="ann-key">Edit icon</div><div class="ann-val">Navigate to Screen 3.2 passing <code>sectionId</code>. No new page — push to router with section context.</div></div>
+      <div class="ann-block"><div class="ann-key">Delete icon</div><div class="ann-val">Remove section from local plan state with animation (<code>opacity→0, height→0</code>, 200ms). No API call yet — changes committed only on "Approve &amp; generate page".</div></div>
+      <div class="ann-block"><div class="ann-key">Scroll</div><div class="ann-val">Cards area scrolls independently. Footer stays fixed. Desktop: 2-column grid layout.</div></div>
+      <div class="ann-block"><div class="ann-key">Approve &amp; generate page</div><div class="ann-key" style="margin-top:4px">→ approval gate + LLM Call 2</div><div class="ann-val">This tap is the user's explicit approval of the plan. Commits current <code>landingPlan</code> state and sends it to <code>POST /api/generate-page</code>. Navigate to Screen 4 on success.</div></div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><span class="divider-label">Edit icon tap →</span><div class="divider-line"></div></div>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 3.2 — EDIT MODE
+  ══════════════════════════════════════════ -->
+  <section class="screen-section" id="s32">
+    <div class="section-header">
+      <span class="screen-id">Screen 3.2</span>
+      <div>
+        <div class="screen-title">Edit mode</div>
+        <div class="screen-desc">Focused editor for one section. Free-text prompt — AI parses on save.</div>
+      </div>
+    </div>
+
+    <div class="bp-toggle">
+      <button class="bp-btn active" onclick="setBreakpoint('s32-device', 'mobile', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="2" y="1" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><rect x="4.5" y="8.5" width="3" height="1" rx=".5" fill="currentColor"/></svg>Mobile
+      </button>
+      <button class="bp-btn" onclick="setBreakpoint('s32-device', 'desktop', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 10h4M6 9v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Desktop
+      </button>
+    </div>
+
+    <div class="device-wrap mobile" id="s32-device">
+      <div class="device-bar">
+        <div class="device-dots">
+          <span style="background:#E24B4A"></span><span style="background:#EF9F27"></span><span style="background:#639922"></span>
+        </div>
+        <div class="device-url">app.build / review</div>
+      </div>
+      <div class="app-shell">
+        <div class="s32-body">
+          <div class="back-link">
+            <svg viewBox="0 0 12 12" fill="none"><path d="M7.5 2L3.5 6l4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Back to plan
+          </div>
+          <div class="edit-area">
+            <div class="edit-sidebar">
+              <div class="sidebar-title">Sections</div>
+              <div class="sidebar-item active">Hero</div>
+              <div class="sidebar-item">Features</div>
+              <div class="sidebar-item">Social proof</div>
+              <div class="sidebar-item">CTA</div>
+            </div>
+            <div class="edit-main">
+              <div class="edit-card">
+                <div class="edit-card-head">
+                  <span class="edit-card-name">Hero</span>
+                  <span class="tag tag-purple">above the fold</span>
+                </div>
+                <div class="edit-card-body">
+                  <textarea class="edit-textarea">Headline: Invoice faster. Get paid sooner.
+Subheadline: Send invoices in under 60 seconds — no templates, no spreadsheets.
+Visual: Split layout — dashboard screenshot on the left, headline and CTA on the right. Purple gradient background.</textarea>
+                  <div class="edit-hint">Edit in free text — AI will parse each field and redraw the card on save.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="screen-footer">
+            <button class="btn-primary">Save changes</button>
+            <button class="btn-secondary">Undo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann-title">// Claude Code — implementation notes</div>
+      <div class="ann-block"><div class="ann-key">Pre-fill</div><div class="ann-val">Textarea pre-filled with structured text serialized from section fields: <code>Field: value\n</code> per line.</div></div>
+      <div class="ann-block"><div class="ann-key">Desktop sidebar</div><div class="ann-val">Shows all section names. Clicking another section swaps the textarea content. Sidebar hidden on mobile.</div></div>
+      <div class="ann-block"><div class="ann-key">Undo</div><div class="ann-val">Restore original textarea content from snapshot taken on mount. No API call.</div></div>
+      <div class="ann-block"><div class="ann-key">Save changes</div><div class="ann-val">If content changed → show Screen 3.3 popup. If unchanged → navigate back to Screen 3.1 directly.</div></div>
+      <div class="ann-block"><div class="ann-key">Dirty check</div><div class="ann-val">Compare <code>currentValue !== initialSnapshot</code> on save tap. Store <code>initialSnapshot</code> as const on mount.</div></div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><span class="divider-label">Save changes tap (if edited) →</span><div class="divider-line"></div></div>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 3.3 — SAVE POPUP
+  ══════════════════════════════════════════ -->
+  <section class="screen-section" id="s33">
+    <div class="section-header">
+      <span class="screen-id">Screen 3.3</span>
+      <div>
+        <div class="screen-title">Save popup</div>
+        <div class="screen-desc">Confirmation popup over blurred Screen 3.2. Triggers LLM re-parse of edited section.</div>
+      </div>
+    </div>
+
+    <div class="bp-toggle">
+      <button class="bp-btn active" onclick="setBreakpoint('s33-device', 'mobile', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="2" y="1" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><rect x="4.5" y="8.5" width="3" height="1" rx=".5" fill="currentColor"/></svg>Mobile
+      </button>
+      <button class="bp-btn" onclick="setBreakpoint('s33-device', 'desktop', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 10h4M6 9v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Desktop
+      </button>
+    </div>
+
+    <div class="device-wrap mobile" id="s33-device" style="position:relative">
+      <div class="device-bar">
+        <div class="device-dots">
+          <span style="background:#E24B4A"></span><span style="background:#EF9F27"></span><span style="background:#639922"></span>
+        </div>
+        <div class="device-url">app.build / review</div>
+      </div>
+      <div class="app-shell" style="position:relative">
+        <div class="blur-layer">
+          <div class="s32-body">
+            <div class="back-link">
+              <svg viewBox="0 0 12 12" fill="none"><path d="M7.5 2L3.5 6l4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Back to plan
+            </div>
+            <div class="edit-area">
+              <div class="edit-main">
+                <div class="edit-card">
+                  <div class="edit-card-head">
+                    <span class="edit-card-name">Hero</span>
+                    <span class="tag tag-purple">above the fold</span>
+                  </div>
+                  <div class="edit-card-body">
+                    <div style="flex:1;background:var(--surface2);border:1px solid var(--purple-mid);border-radius:6px;padding:10px 12px;font-size:11px;color:var(--text-2);font-family:var(--font-mono);line-height:1.7">Headline: Invoice faster. Get paid sooner.
+Subheadline: Send invoices in 60 seconds.
+Visual: Split layout, purple bg.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="screen-footer">
+              <button class="btn-primary" style="opacity:.4">Save changes</button>
+              <button class="btn-secondary" style="opacity:.4">Undo</button>
+            </div>
+          </div>
+        </div>
+        <div class="popup-overlay">
+          <div class="popup">
+            <div class="popup-title">Apply changes?</div>
+            <div class="popup-sub">AI will re-generate the selected section card based on your edits. This takes a few seconds.</div>
+            <div class="popup-footer">
+              <button class="btn-primary">Re-generate</button>
+              <button class="btn-secondary">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann-title">// Claude Code — implementation notes</div>
+      <div class="ann-block"><div class="ann-key">Trigger</div><div class="ann-val">Show only when <code>currentValue !== initialSnapshot</code>. Skip popup entirely if no changes.</div></div>
+      <div class="ann-block"><div class="ann-key">Re-generate</div><div class="ann-key" style="margin-top:4px">→ LLM Call 1b</div><div class="ann-val">Send edited text to <code>POST /api/parse-section</code> with <code>{ sectionId, rawText, sectionType }</code>. Returns updated section JSON. Merge into <code>landingPlan</code> in session. Navigate back to Screen 3.1.</div></div>
+      <div class="ann-block"><div class="ann-key">Cancel</div><div class="ann-val">Dismiss popup. Return to Screen 3.2 edit state unchanged.</div></div>
+      <div class="ann-block"><div class="ann-key">Loading state</div><div class="ann-val">After "Re-generate" tap: replace popup content with spinner + "Updating section..." text. No separate screen needed.</div></div>
+      <div class="ann-block"><div class="ann-key">Responsive</div><div class="ann-val">Popup max-width 300px mobile, 360px desktop. Always centered over blurred content.</div></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+function setBreakpoint(deviceId, bp, btn) {
+  const device = document.getElementById(deviceId);
+  device.classList.remove('mobile', 'desktop');
+  device.classList.add(bp);
+  const group = btn.closest('.bp-toggle');
+  group.querySelectorAll('.bp-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

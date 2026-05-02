@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Landing Builder — Screen 1.1 & 1.2</title>
+<style>
+  :root {
+    --bg: #F7F6F3;
+    --surface: #FFFFFF;
+    --surface2: #F0EEE9;
+    --border: rgba(0,0,0,0.08);
+    --border-md: rgba(0,0,0,0.14);
+    --text: #1A1916;
+    --text-2: #6B6860;
+    --text-3: #A09D97;
+    --purple: #534AB7;
+    --purple-light: #EEEDFE;
+    --purple-mid: #AFA9EC;
+    --purple-dark: #3C3489;
+    --green-light: #EAF3DE;
+    --green: #3B6D11;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-xs: 6px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --font: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(247,246,243,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-3);
+    margin-right: 8px;
+    letter-spacing: .04em;
+  }
+  .nav-chip {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border-md);
+    color: var(--text-2);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all .15s;
+    text-decoration: none;
+  }
+  .nav-chip:hover, .nav-chip.active {
+    background: var(--purple);
+    color: #fff;
+    border-color: var(--purple);
+  }
+
+  /* ── PAGE LAYOUT ── */
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── SCREEN SECTION ── */
+  .screen-section {
+    margin-bottom: 64px;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .screen-id {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--purple);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    background: var(--purple-light);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .screen-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .screen-desc {
+    font-size: 13px;
+    color: var(--text-2);
+    margin-top: 2px;
+  }
+
+  /* ── BREAKPOINT TOGGLE ── */
+  .bp-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .bp-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-md);
+    background: var(--surface);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .bp-btn.active {
+    background: var(--text);
+    color: #fff;
+    border-color: var(--text);
+  }
+  .bp-btn svg { width: 12px; height: 12px; }
+
+  /* ── DEVICE FRAME ── */
+  .device-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: max-width .3s ease;
+  }
+  .device-wrap.mobile { max-width: 390px; }
+  .device-wrap.desktop { max-width: 100%; }
+
+  .device-bar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .device-dots { display: flex; gap: 5px; }
+  .device-dots span {
+    width: 8px; height: 8px; border-radius: 50%;
+    display: inline-block;
+  }
+  .device-url {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--text-3);
+    font-family: var(--font-mono);
+  }
+
+  /* ── APP SHELL ── */
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── SCREEN 1.1 CONTENT ── */
+  .s1-body {
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-height: 480px;
+  }
+
+  /* Desktop: two columns */
+  .device-wrap.desktop .s1-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .device-wrap.mobile .s1-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .s1-left h1 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .device-wrap.desktop .s1-left h1 { font-size: 32px; }
+
+  .s1-left p {
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  .s1-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .field-textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border-md);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--text-3);
+    font-family: var(--font);
+    resize: none;
+    line-height: 1.5;
+    min-height: 120px;
+    width: 100%;
+    transition: border-color .15s;
+  }
+  .field-textarea:focus {
+    outline: none;
+    border-color: var(--purple-mid);
+    background: var(--surface);
+  }
+  .device-wrap.desktop .field-textarea { min-height: 160px; }
+
+  .tone-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tone-chip {
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border-md);
+    color: var(--text-2);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .tone-chip.active {
+    background: var(--purple-light);
+    border-color: var(--purple-mid);
+    color: var(--purple-dark);
+    font-weight: 500;
+  }
+
+  .btn-primary {
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background .15s;
+    align-self: flex-start;
+  }
+  .btn-primary:hover { background: var(--purple-dark); }
+  .device-wrap.desktop .btn-primary { align-self: flex-end; width: 100%; justify-content: center; }
+
+  /* ── SCREEN 1.2 — POPUP OVERLAY ── */
+  .s12-wrap {
+    position: relative;
+  }
+  .s12-blur {
+    filter: blur(3px);
+    pointer-events: none;
+    user-select: none;
+    opacity: .55;
+  }
+  .s12-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26,25,22,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+  .popup {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    width: 90%;
+    max-width: 320px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+  }
+  .popup-spinner {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2.5px solid var(--purple-mid);
+    border-top-color: var(--purple);
+    margin: 0 auto 16px;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .popup-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .step-list { display: flex; flex-direction: column; gap: 8px; }
+  .step-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-2);
+  }
+  .step-ic {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    flex-shrink: 0;
+  }
+  .step-ic.done { background: var(--green-light); color: var(--green); }
+  .step-ic.prog { background: var(--purple-light); color: var(--purple); }
+
+  /* ── ANNOTATIONS ── */
+  .annotations {
+    margin-top: 20px;
+    background: #1A1916;
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    font-family: var(--font-mono);
+  }
+  .ann-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: #534AB7;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-bottom: 12px;
+  }
+  .ann-block { margin-bottom: 16px; }
+  .ann-block:last-child { margin-bottom: 0; }
+  .ann-key { font-size: 11px; color: #AFA9EC; margin-bottom: 4px; }
+  .ann-val { font-size: 12px; color: #D3D1C7; line-height: 1.5; }
+  .ann-val code {
+    color: #9FE1CB;
+    background: rgba(255,255,255,.04);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0 32px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-3);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  /* Google Fonts */
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono&display=swap');
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <span class="nav-label">Screens</span>
+  <a class="nav-chip active" href="#s11">1.1 Prompt</a>
+  <a class="nav-chip" href="#s12">1.2 Generating</a>
+</nav>
+
+<div class="page">
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 1.1 — PROMPT INPUT
+  ══════════════════════════════════════════ -->
+  <section class="screen-section" id="s11">
+    <div class="section-header">
+      <span class="screen-id">Screen 1.1</span>
+      <div>
+        <div class="screen-title">Prompt input</div>
+        <div class="screen-desc">User describes their product. LLM call triggered on submit.</div>
+      </div>
+    </div>
+
+    <div class="bp-toggle">
+      <button class="bp-btn active" onclick="setBreakpoint('s11-device', 'mobile', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="2" y="1" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><rect x="4.5" y="8.5" width="3" height="1" rx=".5" fill="currentColor"/></svg>
+        Mobile
+      </button>
+      <button class="bp-btn" onclick="setBreakpoint('s11-device', 'desktop', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 10h4M6 9v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Desktop
+      </button>
+    </div>
+
+    <div class="device-wrap mobile" id="s11-device">
+      <div class="device-bar">
+        <div class="device-dots">
+          <span style="background:#E24B4A"></span>
+          <span style="background:#EF9F27"></span>
+          <span style="background:#639922"></span>
+        </div>
+        <div class="device-url">app.build / new</div>
+      </div>
+      <div class="app-shell">
+        <div class="s1-body">
+          <div class="s1-inner">
+            <div class="s1-left">
+              <h1>Describe your product</h1>
+              <p>We'll generate a complete landing page plan — structure, copy, and visual directions for each section.</p>
+            </div>
+            <div class="s1-right">
+              <div class="field-group">
+                <label class="field-label">What are you building a page for?</label>
+                <textarea class="field-textarea" placeholder='e.g. "A SaaS tool that helps freelancers send invoices in under 60 seconds — no templates, no spreadsheets"'></textarea>
+              </div>
+              <div class="field-group">
+                <label class="field-label">Tone</label>
+                <div class="tone-row">
+                  <span class="tone-chip">Professional</span>
+                  <span class="tone-chip">Friendly</span>
+                  <span class="tone-chip active">Bold</span>
+                  <span class="tone-chip">Minimal</span>
+                </div>
+              </div>
+              <button class="btn-primary">
+                Generate landing plan
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann-title">// Claude Code — implementation notes</div>
+      <div class="ann-block">
+        <div class="ann-key">Trigger</div>
+        <div class="ann-val">On "Generate landing plan" click → <code>POST /api/generate-plan</code> with <code>{ prompt, tone }</code></div>
+      </div>
+      <div class="ann-block">
+        <div class="ann-key">LLM Call 1</div>
+        <div class="ann-val">System prompt instructs model to return structured JSON: <code>{ sections: [{ id, name, type, fields: {}, visual_direction }] }</code></div>
+      </div>
+      <div class="ann-block">
+        <div class="ann-key">State</div>
+        <div class="ann-val">Store <code>prompt</code> and <code>tone</code> in session — needed for "Edit prompt" navigation from later screens</div>
+      </div>
+      <div class="ann-block">
+        <div class="ann-key">Validation</div>
+        <div class="ann-val">Disable button if textarea is empty. Min length: 20 chars.</div>
+      </div>
+      <div class="ann-block">
+        <div class="ann-key">Responsive</div>
+        <div class="ann-val">≥768px: two-column grid (left = title/description, right = form). &lt;768px: single column stacked.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-label">After submit →</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 1.2 — GENERATING POPUP
+  ══════════════════════════════════════════ -->
+  <section class="screen-section" id="s12">
+    <div class="section-header">
+      <span class="screen-id">Screen 1.2</span>
+      <div>
+        <div class="screen-title">Generating popup</div>
+        <div class="screen-desc">Popup over blurred Screen 1.1 while LLM Call 1 is running.</div>
+      </div>
+    </div>
+
+    <div class="bp-toggle">
+      <button class="bp-btn active" onclick="setBreakpoint('s12-device', 'mobile', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="2" y="1" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><rect x="4.5" y="8.5" width="3" height="1" rx=".5" fill="currentColor"/></svg>
+        Mobile
+      </button>
+      <button class="bp-btn" onclick="setBreakpoint('s12-device', 'desktop', this)">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 10h4M6 9v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Desktop
+      </button>
+    </div>
+
+    <div class="device-wrap mobile s12-wrap" id="s12-device">
+      <div class="device-bar">
+        <div class="device-dots">
+          <span style="background:#E24B4A"></span>
+          <span style="background:#EF9F27"></span>
+          <span style="background:#639922"></span>
+        </div>
+        <div class="device-url">app.build / new</div>
+      </div>
+      <div class="app-shell" style="position:relative">
+        <div class="s1-body s12-blur">
+          <div class="s1-inner">
+            <div class="s1-left">
+              <h1>Describe your product</h1>
+              <p>We'll generate a complete landing page plan — structure, copy, and visual directions for each section.</p>
+            </div>
+            <div class="s1-right">
+              <div class="field-group">
+                <label class="field-label">What are you building a page for?</label>
+                <div class="field-textarea" style="display:flex;align-items:flex-start;font-size:13px;color:var(--text-2)">A SaaS tool that helps freelancers send invoices in under 60 seconds — no templates, no spreadsheets</div>
+              </div>
+              <div class="field-group">
+                <label class="field-label">Tone</label>
+                <div class="tone-row">
+                  <span class="tone-chip active">Bold</span>
+                </div>
+              </div>
+              <button class="btn-primary" style="opacity:.4;pointer-events:none">
+                Generate landing plan
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="s12-overlay">
+          <div class="popup">
+            <div class="popup-spinner"></div>
+            <div class="popup-title">Building your landing plan...</div>
+            <div class="step-list">
+              <div class="step-item"><span class="step-ic done">✓</span>Analyzing your product</div>
+              <div class="step-item"><span class="step-ic done">✓</span>Defining page structure</div>
+              <div class="step-item"><span class="step-ic done">✓</span>Writing section copy</div>
+              <div class="step-item"><span class="step-ic prog">…</span>Generating visual directions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotations">
+      <div class="ann-title">// Claude Code — implementation notes</div>
+      <div class="ann-block">
+        <div class="ann-key">Trigger</div>
+        <div class="ann-val">Show immediately after form submit. Overlay renders on top of blurred Screen 1.1 content.</div>
+      </div>
+      <div class="ann-block">
+        <div class="ann-key">Progress steps</div>
+        <div class="ann-val">Steps animate sequentially via <code>setTimeout</code> (800ms, 1600ms, 2400ms). Last step stays as "…" until API responds.</div>
+      </div>
+      <div class="ann-block">
+        <div class="ann-key">On success</div>
+        <div class="ann-val">Navigate to Screen 3.1 (review). Pass plan JSON via router state or session storage: <code>key: "landingPlan"</code></div>
+      </div>
+      <div class="ann-block">
+        <div class="ann-key">On error</div>
+        <div class="ann-val">Replace spinner with error state. Show "Try again" button that resubmits same prompt.</div>
+      </div>
+      <div class="ann-block">
+        <div class="ann-key">Responsive</div>
+        <div class="ann-val">Popup width: 90% on mobile, fixed 360px on desktop. Background blur applies to the full screen behind.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+function setBreakpoint(deviceId, bp, btn) {
+  const device = document.getElementById(deviceId);
+  device.classList.remove('mobile', 'desktop');
+  device.classList.add(bp);
+  const group = btn.closest('.bp-toggle');
+  group.querySelectorAll('.bp-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+document.querySelectorAll('.tone-chip').forEach(chip => {
+  chip.addEventListener('click', function() {
+    this.closest('.tone-row').querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
