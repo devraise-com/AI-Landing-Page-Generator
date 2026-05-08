@@ -32,7 +32,7 @@ An AI-powered web app that turns a product description into a complete landing p
 
 ## How to run locally
 
-**Prerequisites:** Node.js 18+, Python 3.11+, Anthropic and/or OpenAI API key (depends on provider settings)
+**Prerequisites:** Node.js 18+, Python 3.11+, Anthropic API key + OpenAI API key (both are required for the full flow)
 
 ```bash
 # Clone
@@ -41,15 +41,19 @@ cd AI-Landing-Page-Generator
 
 # Backend
 cd backend
-cp .env.example .env          # set token/cors/limits and provider config
+cp .env.example .env          # set token/cors/limits/models
 # Required vars in backend/.env:
 #   ANONYMOUS_TOKEN=any-secret-string
 #   INPUT_PROMPT_MAX_CHARS=1000
 #   ALLOWED_ORIGINS=http://localhost:5173
-#   PLAN_LLM_PROVIDER=anthropic|openai
-#   PARSE_LLM_PROVIDER=anthropic|openai
-#   ANTHROPIC_API_KEY=...      # required when provider is anthropic
-#   OPENAI_API_KEY=...         # required when provider is openai
+#   ANTHROPIC_API_KEY=...
+#   OPENAI_API_KEY=...
+#   OPENAI_MODEL_PLAN=gpt-4.1
+#   OPENAI_MODEL_PARSE=gpt-4.1-mini
+# Optional Langfuse vars:
+#   LANGFUSE_PUBLIC_KEY=...
+#   LANGFUSE_SECRET_KEY=...
+#   LANGFUSE_BASE_URL=https://cloud.langfuse.com
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 
@@ -72,12 +76,12 @@ npm run dev                   # http://localhost:5173
 ```
 Screen 1.1  Prompt input
     ↓
-Screen 1.2  Generating popup  ←  LLM Call 1 (PLAN_LLM_PROVIDER)
+Screen 1.2  Generating popup  ←  LLM Call 1 (OpenAI: OPENAI_MODEL_PLAN)
     ↓
 Screen 3.1  Review plan (approve or edit)
     ↓ (optional)
 Screen 3.2  Edit section
-Screen 3.3  Save popup        ←  LLM Call 1b (PARSE_LLM_PROVIDER)
+Screen 3.3  Save popup        ←  LLM Call 1b (OpenAI: OPENAI_MODEL_PARSE)
     ↓
 Screen 4    Final landing page  ←  LLM Call 2 (Sonnet, Anthropic)
 ```
@@ -88,9 +92,9 @@ Full details: [`docs/01-user-flow.md`](docs/01-user-flow.md)
 
 | Call | Model | Trigger | Purpose |
 |------|-------|---------|---------|
-| Call 1 | `PLAN_LLM_PROVIDER` | "Generate landing plan" | Prompt → structured plan JSON |
-| Call 1b | `PARSE_LLM_PROVIDER` | "Re-generate" in edit popup | Re-parse edited section (optional) |
-| Call 2 | Sonnet (Anthropic) | "Approve & generate page" | Plan → final landing page HTML |
+| Call 1 | OpenAI (`OPENAI_MODEL_PLAN`) | "Generate landing plan" | Prompt → structured plan JSON |
+| Call 1b | OpenAI (`OPENAI_MODEL_PARSE`) | "Re-generate" in edit popup | Re-parse edited section (optional) |
+| Call 2 | Anthropic Sonnet (`claude-sonnet-4-6`) | "Approve & generate page" | Plan → final landing page HTML |
 
 Full details: [`docs/02-llm-plan.md`](docs/02-llm-plan.md)
 
@@ -120,11 +124,11 @@ Call 2 returns a complete HTML document (`{ html: string }`), and the frontend r
 
 **Lightweight parse model for re-parse**
 
-Call 1b is deterministic (labeled text → JSON), so this stage is optimized for latency/cost and can use a cheaper provider/model via `PARSE_LLM_PROVIDER`.
+Call 1b is deterministic (labeled text → JSON), so this stage is optimized for latency/cost and uses a lighter OpenAI model via `OPENAI_MODEL_PARSE`.
 
 **Prompts as files**
 
-System prompts live in `backend/prompts/*.txt`, loaded at startup. This separates prompt engineering from application logic — prompts can be iterated without touching Python code.
+System prompts live in `backend/prompts/*.txt`, loaded lazily and cached in memory. This separates prompt engineering from application logic — prompts can be iterated without touching Python code.
 
 **Input guardrails for MVP safety**
 
@@ -149,7 +153,7 @@ Backend validates prompts before calling the LLM: max length via `INPUT_PROMPT_M
 - Used `sessionStorage` for state persistence instead of database/user workspaces.
 - Returned full HTML in one response and rendered via sandboxed `iframe` (no component-level renderer/template engine).
 - Deferred a dedicated planning agent step before Call 1 (for disambiguation and enrichment when user input is sparse), to keep the MVP pipeline fast and simple.
-- Deferred advanced production features: rate-limiting layer, background jobs, observability dashboards, and full automated test suite.
+- Deferred advanced production features: rate-limiting layer, background jobs, and full automated test suite. Basic AI tracing is already integrated via Langfuse.
 
 ---
 

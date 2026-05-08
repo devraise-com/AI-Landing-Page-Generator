@@ -1,34 +1,28 @@
-import json
 import logging
 import os
-from datetime import datetime, timezone
 
-_SKIP_FIELDS = frozenset(logging.LogRecord("", 0, "", 0, "", (), None).__dict__.keys()) | {
-    "message", "asctime", "exc_text", "stack_info",
+_STANDARD_FIELDS = frozenset(logging.LogRecord("", 0, "", 0, "", (), None).__dict__.keys()) | {
+    "message",
+    "asctime",
 }
 
 
-class _JsonFormatter(logging.Formatter):
+class _StructuredFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
-        record.message = record.getMessage()
-        log: dict = {
-            "ts": datetime.fromtimestamp(record.created, tz=timezone.utc).strftime(
-                "%Y-%m-%dT%H:%M:%S.%f"
-            )[:-3] + "Z",
-            "level": record.levelname.lower(),
-            "logger": record.name,
-            "message": record.message,
-        }
-        for key, value in record.__dict__.items():
-            if key not in _SKIP_FIELDS and not key.startswith("_"):
-                log[key] = value
-        if record.exc_info:
-            log["exc"] = self.formatException(record.exc_info)
-        return json.dumps(log, ensure_ascii=False)
+        base = super().format(record)
+        extras = {k: v for k, v in record.__dict__.items() if k not in _STANDARD_FIELDS}
+        if not extras:
+            return base
+        parts = " ".join(f"{k}={v}" for k, v in extras.items())
+        return f"{base} {parts}"
 
 
 def setup_logging() -> None:
     level = os.getenv("LOG_LEVEL", "INFO").upper()
+    formatter = _StructuredFormatter("%(asctime)s %(levelname)s %(name)s %(message)s")
     handler = logging.StreamHandler()
-    handler.setFormatter(_JsonFormatter())
-    logging.basicConfig(level=level, handlers=[handler], force=True)
+    handler.setFormatter(formatter)
+    root = logging.getLogger()
+    root.setLevel(level)
+    root.handlers.clear()
+    root.addHandler(handler)

@@ -1,5 +1,6 @@
 import os
 import uuid
+from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -13,8 +14,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from routers import generate_plan, parse_section, generate_page
+from services.langfuse_observability import flush_langfuse
 
-app = FastAPI(title="Landing Page Builder API")
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    yield
+    flush_langfuse()
+
+
+app = FastAPI(title="Landing Page Builder API", lifespan=lifespan)
 
 allowed_origins = [
     o.strip()
